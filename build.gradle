@@ -1,0 +1,45 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'com.gradle.plugin-publish' version '0.10.0'
+}
+
+group 'com.github.alexeykorshun'
+version '0.3.5'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation 'com.google.code.gson:gson:2.8.0'
+}
+
+gradlePlugin {
+    plugins {
+        slackPlugin {
+            id = 'com.github.alexeykorshun.slack-build-notify'
+            implementationClass = 'com.github.alexeykorshun.gradle.slack.SlackPlugin'
+        }
+    }
+}
+
+pluginBundle {
+    website = 'https://github.com/AlexeyKorshun/slack-work-notify'
+    vcsUrl = 'https://github.com/AlexeyKorshun/slack-work-notify.git'
+    tags = ['slack', 'build', 'notify']
+
+    plugins {
+        slackPlugin {
+            // id is captured from gradlePlugin extension block
+            displayName = 'Slack build notify'
+            description = 'Plugin for notify your slack channel about complete build'
+            tags = ['slack', 'build', 'notify']
+            version = '0.3.5'
+        }
+    }
+}
