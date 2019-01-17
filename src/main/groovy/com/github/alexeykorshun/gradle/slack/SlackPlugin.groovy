@@ -25,7 +25,7 @@ class SlackPlugin implements Plugin<Project> {
 
     void apply(Project project) {
         mTaskLogBuilder = new StringBuilder()
-        mExtension = project.extensions.create('slack', SlackPluginExtension)
+        mExtension = project.extensions.create('rawf', SlackPluginExtension)
 
         project.afterEvaluate {
             if (mExtension.slackUrl != null && mExtension.enabled)
