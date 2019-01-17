@@ -22,18 +22,17 @@ public class SlackApi {
         if (service == null) {
             throw new IllegalArgumentException(
                     "Missing WebHook URL Configuration @ SlackApi");
-        } else
-            if (!service.startsWith("https://hooks.slack.com/services/")) {
-                throw new IllegalArgumentException(
-                        "Invalid Service URL. WebHook URL Format: https://hooks.slack.com/services/{id_1}/{id_2}/{token}");
-            }
-
-        this.service = service;
+        } else if (!service.isEmpty() && !service.startsWith("https://hooks.slack.com/services/")) {
+            throw new IllegalArgumentException(
+                    "Invalid Service URL. WebHook URL Format: https://hooks.slack.com/services/{id_1}/{id_2}/{token}");
+        } else {
+            this.service = service;
+        }
     }
 
     /**
      * Prepare Message and Send to request
-     * 
+     *
      * @param message message to send
      */
     public void call(SlackMessage message) {
@@ -44,10 +43,11 @@ public class SlackApi {
 
     /**
      * Send request to WebService
-     * 
+     *
      * @param message slack message as json
      */
     private void send(JsonObject message) {
+        if (service.isEmpty()) return;
         URL url;
         HttpURLConnection connection = null;
         try {
@@ -60,12 +60,10 @@ public class SlackApi {
             connection.setDoInput(true);
             connection.setDoOutput(true);
 
-            String payload = "payload="
-                    + URLEncoder.encode(message.toString(), "UTF-8");
+            String payload = "payload=" + URLEncoder.encode(message.toString(), "UTF-8");
 
             // Send request
-            DataOutputStream wr = new DataOutputStream(
-                    connection.getOutputStream());
+            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
             wr.writeBytes(payload);
             wr.flush();
             wr.close();
@@ -84,11 +82,8 @@ public class SlackApi {
             rd.close();
 
         } catch (Exception e) {
-
             e.printStackTrace();
-
         } finally {
-
             if (connection != null) {
                 connection.disconnect();
             }
