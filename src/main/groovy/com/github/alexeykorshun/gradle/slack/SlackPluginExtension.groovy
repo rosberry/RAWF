@@ -7,11 +7,11 @@ package com.github.alexeykorshun.gradle.slack
  * Created by Alexey Korshun on 08/07/18.
  */
 class SlackPluginExtension {
-    String slackUrl
-    String jiraUrl
-    List<Object> dependsOnTasks
+    String slackUrl = ""
+    String jiraUrl = ""
+    List<Object> dependsOnTasks = Arrays.asList("build")
     boolean enabled = true
-    String buildNumber
+    String buildNumber = "1.0"
 
     void dependsOnTasks(Object... paths) {
         this.dependsOnTasks = Arrays.asList(paths)
