@@ -1,9 +1,10 @@
 /*
  * Copyright © 2018 Rosberry. All rights reserved.
  */
-package com.github.alexeykorshun.gradle.slack.model
+package com.rosberry.android.gradle.rawf.model
 
-import com.github.alexeykorshun.gradle.slack.utils.GitUtils
+
+import com.rosberry.android.gradle.rawf.utils.GitUtils
 import net.gpedro.integrations.slack.SlackAttachment
 import net.gpedro.integrations.slack.SlackMessage
 

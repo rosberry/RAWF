@@ -1,7 +1,7 @@
 /*
  * Copyright © 2018 Rosberry. All rights reserved.
  */
-package com.github.alexeykorshun.gradle.slack
+package com.rosberry.android.gradle.rawf
 
 /**
  * Created by Alexey Korshun on 08/07/18.

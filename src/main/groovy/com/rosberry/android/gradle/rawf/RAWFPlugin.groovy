@@ -1,11 +1,12 @@
 /*
  * Copyright © 2018 Rosberry. All rights reserved.
  */
-package com.github.alexeykorshun.gradle.slack
+package com.rosberry.android.gradle.rawf
 
-import com.github.alexeykorshun.gradle.slack.jira.JIRAApi
-import com.github.alexeykorshun.gradle.slack.model.SlackMessageTransformer
-import com.github.alexeykorshun.gradle.slack.utils.GitUtils
+
+import com.rosberry.android.gradle.rawf.jira.JIRAApi
+import com.rosberry.android.gradle.rawf.model.SlackMessageTransformer
+import com.rosberry.android.gradle.rawf.utils.GitUtils
 import net.gpedro.integrations.slack.SlackApi
 import net.gpedro.integrations.slack.SlackMessage
 import org.gradle.api.Plugin

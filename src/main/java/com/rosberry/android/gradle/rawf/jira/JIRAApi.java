@@ -1,4 +1,4 @@
-package com.github.alexeykorshun.gradle.slack.jira;
+package com.rosberry.android.gradle.rawf.jira;
 
 import com.google.gson.JsonObject;
 
