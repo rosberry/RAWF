@@ -4,7 +4,7 @@ plugins {
     id 'com.gradle.plugin-publish' version '0.10.0'
 }
 
-group 'com.rosberry.adnroid.gradle'
+group 'com.rosberry.android.gradle'
 version '0.1.0'
 
 sourceCompatibility = 1.8
@@ -22,8 +22,11 @@ dependencies {
 gradlePlugin {
     plugins {
         rawfPlugin {
-            id = 'com.rosberry.adnroid.gradle.rawf'
-            implementationClass = 'com.rosberry.adnroid.gradle.slack.SlackPlugin'
+            id = 'com.rosberry.android.gradle.rawf'
+            displayName = 'RAWF'
+            description = 'Plugin for rosberry android workflow'
+            version = '0.1.0'
+            implementationClass = 'com.rosberry.android.gradle.rawf.RAWFPlugin'
         }
     }
 }
@@ -31,15 +34,5 @@ gradlePlugin {
 pluginBundle {
     website = 'https://gitlab.com/lehakorshun/rawf'
     vcsUrl = 'https://gitlab.com/lehakorshun/rawf.git'
-    tags = ['slack', 'build', 'notify']
-
-    plugins {
-        rawfPlugin {
-            // id is captured from gradlePlugin extension block
-            displayName = 'RAWF'
-            description = 'Plugin for rosberry android workflow'
-            tags = ['slack', 'build', 'notify', 'jira']
-            version = '0.1.0'
-        }
-    }
+    tags = ['slack', 'build', 'notify', 'jira']
 }
