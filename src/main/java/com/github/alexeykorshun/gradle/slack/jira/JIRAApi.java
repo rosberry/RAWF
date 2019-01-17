@@ -16,19 +16,17 @@ public class JIRAApi {
     private final static String TRANSITION_ID = "61";
     private final static String ID_PROPERTY = "id";
     private final static String TRANSITION_PROPERTY = "transition";
-    private String url;
+    private final String url;
 
     public JIRAApi(String url) {
         if (url == null) {
             throw new IllegalArgumentException("Missing WebHook URL Configuration @ JIRAApi");
-        } else if (!url.contains("atlassian.net")) {
-            throw new IllegalArgumentException("Invalid Service URL.");
+        } else {
+            this.url = url;
         }
-
-        this.url = url;
     }
 
-    public void call(String ticketNumber) {
+    public void moveTicket(String ticketNumber) {
         JsonObject transitionData = new JsonObject();
         transitionData.addProperty(ID_PROPERTY, TRANSITION_ID);
 
@@ -38,6 +36,7 @@ public class JIRAApi {
     }
 
     private void send(String ticketNumber, JsonObject message) {
+        if (url.isEmpty()) return;
         URL url;
         HttpsURLConnection connection = null;
         try {
@@ -54,7 +53,7 @@ public class JIRAApi {
 
             String userpass = "alexey.korshun@rosberry.com" + ":" + "GNs2mV6X0Qm5S9PVTbp1FA29";
             String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userpass.getBytes()));
-            connection.setRequestProperty ("Authorization", basicAuth);
+            connection.setRequestProperty("Authorization", basicAuth);
             connection.setRequestProperty("Accept", "application/json");
             connection.setRequestProperty("Content-Type", "application/json");
 
