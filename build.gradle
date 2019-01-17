@@ -21,7 +21,7 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        slackPlugin {
+        rawfPlugin {
             id = 'com.rosberry.adnroid.gradle.rawf'
             implementationClass = 'com.rosberry.adnroid.gradle.slack.SlackPlugin'
         }
@@ -34,7 +34,7 @@ pluginBundle {
     tags = ['slack', 'build', 'notify']
 
     plugins {
-        slackPlugin {
+        rawfPlugin {
             // id is captured from gradlePlugin extension block
             displayName = 'RAWF'
             description = 'Plugin for rosberry android workflow'
