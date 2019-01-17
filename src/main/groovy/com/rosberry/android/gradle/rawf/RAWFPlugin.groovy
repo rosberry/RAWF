@@ -29,7 +29,7 @@ class RAWFPlugin implements Plugin<Project> {
         mExtension = project.extensions.create('rawf', RAWFPluginExtension)
 
         project.afterEvaluate {
-            if (mExtension.slackUrl != null && mExtension.enabled)
+            if (mExtension.enabled)
                 monitorTasksLifecycle(project)
         }
     }
@@ -55,14 +55,20 @@ class RAWFPlugin implements Plugin<Project> {
 
     void handleTaskFinished(Task task) {
 
-        // only send a slack message if the task success
-        // or the task is registered to be monitored
-        boolean shouldSendMessage = shouldMonitorTask(task)
-        if (shouldSendMessage) {
-            JIRAApi jiraApi = new JIRAApi(mExtension.jiraUrl, mExtension.login, mExtension.token)
-            jiraApi.moveTicket(GitUtils.ticketNumber())
+        boolean shouldDoWork = shouldMonitorTask(task)
+        if (shouldDoWork) {
+            String ticketNumber = GitUtils.ticketNumber()
 
-            SlackMessage slackMessage = SlackMessageTransformer.buildSlackMessage(mExtension.jiraUrl, mExtension.buildNumber)
+            JIRAApi jiraApi = new JIRAApi(mExtension.jiraUrl, mExtension.login, mExtension.token)
+            jiraApi.moveTicket(ticketNumber)
+
+            String message = ticketNumber + " :\"" + jiraApi.getTitle(ticketNumber) + "\""
+            SlackMessage slackMessage = SlackMessageTransformer.buildSlackMessage(
+                    mExtension.jiraUrl,
+                    mExtension.buildNumber,
+                    message
+            )
+
             SlackApi api = new SlackApi(mExtension.slackUrl)
             api.call(slackMessage)
         }
