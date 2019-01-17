@@ -58,8 +58,8 @@ class SlackPlugin implements Plugin<Project> {
         // or the task is registered to be monitored
         boolean shouldSendMessage = shouldMonitorTask(task)
         if (shouldSendMessage) {
-            JIRAApi jiraApi = new JIRAApi(mExtension.jiraUrl)
-            jiraApi.call(GitUtils.ticketNumber())
+            JIRAApi jiraApi = new JIRAApi(mExtension.jiraUrl, mExtension.login, mExtension.token)
+            jiraApi.moveTicket(GitUtils.ticketNumber())
 
             SlackMessage slackMessage = SlackMessageTransformer.buildSlackMessage(mExtension.jiraUrl, mExtension.buildNumber)
             SlackApi api = new SlackApi(mExtension.slackUrl)

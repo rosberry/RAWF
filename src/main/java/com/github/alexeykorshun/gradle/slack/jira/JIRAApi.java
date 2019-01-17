@@ -17,8 +17,17 @@ public class JIRAApi {
     private final static String ID_PROPERTY = "id";
     private final static String TRANSITION_PROPERTY = "transition";
     private final String url;
+    private final String login;
+    private final String token;
 
-    public JIRAApi(String url) {
+    public JIRAApi(String url, String login, String token) {
+        if (login == null || token == null || login.isEmpty() || token.isEmpty()) {
+            throw new IllegalArgumentException("Wrong credentials @ JIRAApi");
+        }
+
+        this.login = login;
+        this.token = token;
+
         if (url == null) {
             throw new IllegalArgumentException("Missing WebHook URL Configuration @ JIRAApi");
         } else {
@@ -51,7 +60,8 @@ public class JIRAApi {
             connection.setDoInput(true);
             connection.setDoOutput(true);
 
-            String userpass = "alexey.korshun@rosberry.com" + ":" + "GNs2mV6X0Qm5S9PVTbp1FA29";
+            //String userpass = "alexey.korshun@rosberry.com" + ":" + "GNs2mV6X0Qm5S9PVTbp1FA29";
+            String userpass = login + ":" + token;
             String basicAuth = "Basic " + new String(Base64.getEncoder().encode(userpass.getBytes()));
             connection.setRequestProperty("Authorization", basicAuth);
             connection.setRequestProperty("Accept", "application/json");

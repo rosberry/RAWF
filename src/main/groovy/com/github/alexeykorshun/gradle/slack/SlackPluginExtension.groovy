@@ -12,6 +12,8 @@ class SlackPluginExtension {
     List<Object> dependsOnTasks = Arrays.asList("build")
     boolean enabled = true
     String buildNumber = "1.0"
+    String login = ""
+    String token = ""
 
     void dependsOnTasks(Object... paths) {
         this.dependsOnTasks = Arrays.asList(paths)
