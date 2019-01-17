@@ -6,7 +6,7 @@ package com.github.alexeykorshun.gradle.slack
 /**
  * Created by Alexey Korshun on 08/07/18.
  */
-class SlackPluginExtension {
+class RAWFPluginExtension {
     String slackUrl = ""
     String jiraUrl = ""
     List<Object> dependsOnTasks = Arrays.asList("build")

@@ -18,14 +18,14 @@ import org.gradle.api.tasks.TaskState
 /**
  * Created by Alexey Korshun on 08/07/18.
  */
-class SlackPlugin implements Plugin<Project> {
+class RAWFPlugin implements Plugin<Project> {
 
-    SlackPluginExtension mExtension
+    RAWFPluginExtension mExtension
     StringBuilder mTaskLogBuilder
 
     void apply(Project project) {
         mTaskLogBuilder = new StringBuilder()
-        mExtension = project.extensions.create('rawf', SlackPluginExtension)
+        mExtension = project.extensions.create('rawf', RAWFPluginExtension)
 
         project.afterEvaluate {
             if (mExtension.slackUrl != null && mExtension.enabled)
