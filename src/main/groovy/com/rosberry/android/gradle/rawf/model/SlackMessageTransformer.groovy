@@ -15,7 +15,7 @@ class SlackMessageTransformer {
     private static final String TITLE_DEFAULT = 'New Build: '
     private static final String COLOR_PASSED = 'good'
 
-    static SlackMessage buildSlackMessage(String host, String buildNumber) {
+    static SlackMessage buildSlackMessage(String host, String buildNumber, String message) {
 
         String title = new StringBuilder().append(TITLE_DEFAULT)
                 .append(buildNumber)
@@ -33,7 +33,7 @@ class SlackMessageTransformer {
         attachments.setFallback("")
         attachments.setColor(COLOR_PASSED)
         attachments.setAuthorName(GitUtils.lastCommitAuthor())
-        attachments.setTitle(GitUtils.lastCommitMessage())
+        attachments.setTitle(message)
         attachments.setTitleLink(url)
 
         slackMessage.addAttachments(attachments)
