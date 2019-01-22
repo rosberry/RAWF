@@ -16,8 +16,12 @@ import java.util.Base64;
  */
 public class JIRAApi {
 
-    private final static String PATH = "/rest/api/3/issue/";
-    private final static String TRANSITION_ID = "61";
+    private final static String TRANSITION_ID = "61"; //todo: make dynamic
+
+    private final static String BASE_PATH = "/rest/api/3/";
+    private final static String ISSUE_PATH = "issue/";
+    private final static String TRANSITION_PATH = "/transitions";
+
     private final static String ID_PROPERTY = "id";
     private final static String TRANSITION_PROPERTY = "transition";
     private final String url;
@@ -25,18 +29,14 @@ public class JIRAApi {
     private final String token;
 
     public JIRAApi(String url, String login, String token) {
-        if (login == null || token == null || login.isEmpty() || token.isEmpty()) {
+
+        if (login == null || token == null || url == null) {
             throw new IllegalArgumentException("Wrong credentials @ JIRAApi");
         }
 
         this.login = login;
         this.token = token;
-
-        if (url == null) {
-            throw new IllegalArgumentException("Missing WebHook URL Configuration @ JIRAApi");
-        } else {
-            this.url = url;
-        }
+        this.url = url;
     }
 
     public void moveTicket(String ticketNumber) {
@@ -45,7 +45,7 @@ public class JIRAApi {
 
         JsonObject data = new JsonObject();
         data.add(TRANSITION_PROPERTY, transitionData);
-        String path = PATH + ticketNumber + "/transitions";
+        String path = BASE_PATH + ISSUE_PATH + ticketNumber + TRANSITION_PATH;
         send(path, data);
     }
 
@@ -55,7 +55,7 @@ public class JIRAApi {
         URL url;
         HttpsURLConnection connection = null;
         try {
-            String endUrl = this.url + PATH + ticketNumber;
+            String endUrl = this.url + BASE_PATH + ISSUE_PATH + ticketNumber;
             System.out.println("Request url: " + endUrl);
             url = new URL(endUrl);
             connection = (HttpsURLConnection) url.openConnection();
