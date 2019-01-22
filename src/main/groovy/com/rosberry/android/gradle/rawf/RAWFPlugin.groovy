@@ -59,7 +59,7 @@ class RAWFPlugin implements Plugin<Project> {
         if (shouldDoWork) {
             String ticketNumber = GitUtils.ticketNumber()
 
-            JIRAApi jiraApi = new JIRAApi(mExtension.jiraUrl, mExtension.login, mExtension.token)
+            JIRAApi jiraApi = new JIRAApi(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken)
             jiraApi.moveTicket(ticketNumber)
 
             String message = ticketNumber + " :\"" + jiraApi.getTitle(ticketNumber) + "\""
