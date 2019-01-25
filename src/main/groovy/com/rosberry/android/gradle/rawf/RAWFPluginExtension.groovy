@@ -7,18 +7,18 @@ package com.rosberry.android.gradle.rawf
  * Created by Alexey Korshun on 08/07/18.
  */
 class RAWFPluginExtension {
-    boolean enabled = true
-    String slackUrl = ""
-    String jiraUrl = ""
-    String projectKey = ""
-    String jiraLogin = ""
-    String jiraToken = ""
-    String jiraComponent = ""
-    String jiraStatus = ""
-    String buildNumber = "1.0"
-    List<Object> dependsOnTasks = Arrays.asList("build")
+    public boolean enabled = true
+    public String slackUrl = ""
+    public String jiraUrl = ""
+    public String projectKey = ""
+    public String jiraLogin = ""
+    public String jiraToken = ""
+    public String jiraComponent = ""
+    public String jiraStatus = ""
+    public String buildNumber = "1.0"
+    public List<Object> dependsOnTasks = Arrays.asList("build")
 
-    void dependsOnTasks(Object... paths) {
+    public void dependsOnTasks(Object... paths) {
         this.dependsOnTasks = Arrays.asList(paths)
     }
 }

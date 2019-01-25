@@ -4,11 +4,7 @@
 package com.rosberry.android.gradle.rawf
 
 
-import com.rosberry.android.gradle.rawf.jira.JIRAApi
-import com.rosberry.android.gradle.rawf.model.SlackMessageTransformer
-import com.rosberry.android.gradle.rawf.utils.GitUtils
-import net.gpedro.integrations.slack.SlackApi
-import net.gpedro.integrations.slack.SlackMessage
+import com.rosberry.android.gradle.rawf.jira.RAWF
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -57,20 +53,7 @@ class RAWFPlugin implements Plugin<Project> {
 
         boolean shouldDoWork = shouldMonitorTask(task)
         if (shouldDoWork) {
-            String ticketNumber = GitUtils.ticketNumber()
-
-            JIRAApi jiraApi = new JIRAApi(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken)
-            jiraApi.moveTicket(ticketNumber)
-
-            String message = ticketNumber + " :\"" + jiraApi.getTitle(ticketNumber) + "\""
-            SlackMessage slackMessage = SlackMessageTransformer.buildSlackMessage(
-                    mExtension.jiraUrl,
-                    mExtension.buildNumber,
-                    message
-            )
-
-            SlackApi api = new SlackApi(mExtension.slackUrl)
-            api.call(slackMessage)
+            new RAWF().doWork(mExtension)
         }
     }
 

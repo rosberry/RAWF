@@ -49,6 +49,14 @@ public class JIRAApi {
         this.jiraModelParser = new JiraModelParser();
     }
 
+    public void moveTickets(List<Issue> issues) {
+        if (url.isEmpty()) return;
+
+        for (Issue issue : issues) {
+            moveTicket(issue.getKey());
+        }
+    }
+
     public void moveTicket(String ticketNumber) {
         if (url.isEmpty()) return;
 
