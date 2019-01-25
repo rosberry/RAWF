@@ -53,7 +53,8 @@ class RAWFPlugin implements Plugin<Project> {
 
         boolean shouldDoWork = shouldMonitorTask(task)
         if (shouldDoWork) {
-            new RAWF().doWork(mExtension)
+            new RAWF().doWork(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
+                    mExtension.jiraComponent, mExtension.jiraStatus, mExtension.buildNumber, mExtension.slackUrl)
         }
     }
 

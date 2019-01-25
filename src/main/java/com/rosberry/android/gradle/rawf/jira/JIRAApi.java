@@ -2,7 +2,6 @@ package com.rosberry.android.gradle.rawf.jira;
 
 import com.google.gson.JsonObject;
 import com.rosberry.android.gradle.rawf.jira.model.Issue;
-import com.rosberry.android.gradle.rawf.utils.GitUtils;
 import org.gradle.internal.impldep.org.apache.http.client.utils.URIBuilder;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -75,7 +74,7 @@ public class JIRAApi {
     }
 
     public String getTitle(String ticketNumber) {
-        if (url.isEmpty()) return GitUtils.lastCommitMessage();
+        if (url.isEmpty()) return ""; //GitUtils.lastCommitMessage();
 
         try {
             URIBuilder builder = new URIBuilder(url);
@@ -85,7 +84,7 @@ public class JIRAApi {
             return jiraModelParser.getTitleFromIssueRawString(responseString);
         } catch (Exception e) {
             e.printStackTrace();
-            return GitUtils.lastCommitMessage();
+            return ""; //GitUtils.lastCommitMessage();
         }
     }
 

@@ -1,6 +1,5 @@
 package com.rosberry.android.gradle.rawf.jira;
 
-import com.rosberry.android.gradle.rawf.RAWFPluginExtension;
 import org.junit.Test;
 
 public class RAWFTest {
@@ -16,16 +15,6 @@ public class RAWFTest {
 
     @Test
     public void doWork() {
-        RAWFPluginExtension extension = new RAWFPluginExtension();
-        extension.slackUrl = slackUrl;
-        extension.jiraUrl = jiraUrl;
-        extension.projectKey = projectKey;
-        extension.jiraLogin = jiraLogin;
-        extension.jiraToken = jiraToken;
-        extension.jiraComponent = jiraComponent;
-        extension.jiraStatus = jiraStatus;
-        extension.buildNumber = buildNumber;
-
-        new RAWF().doWork(extension);
+        new RAWF().doWork(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraStatus, buildNumber, slackUrl);
     }
 }
