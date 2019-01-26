@@ -24,6 +24,11 @@ class RAWFPlugin implements Plugin<Project> {
         mTaskLogBuilder = new StringBuilder()
         mExtension = project.extensions.create('rawf', RAWFPluginExtension)
 
+        project.task('releaseNotes') {
+            return new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken,
+                    mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraStatus)
+        }
+
         project.afterEvaluate {
             if (mExtension.enabled)
                 monitorTasksLifecycle(project)
