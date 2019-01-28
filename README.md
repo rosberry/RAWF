@@ -19,7 +19,7 @@ repositories {
 
 `apply plugin: "com.rosberry.android.gradle.rawf"`
 
-И добавить блок с настройками, для версии `0.2.1` он выглядит так:
+И добавить блок с настройками, для версии `0.3.8` он выглядит так:
 
 ```groovy
 rawf {
@@ -35,3 +35,5 @@ rawf {
     buildNumber 'number of your build for use it in notification'
 }
 ```
+
+Плагин добавляет в проект задачу `releaseNotes`, которая устанавливает в проект переменную `releaseMessage` в виде разделенных тасков из JIRA.
