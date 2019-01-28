@@ -35,6 +35,7 @@ public class RAWF {
                     .append(".\n");
         }
 
+        System.out.println(message.toString());
         return message.toString();
     }
 }

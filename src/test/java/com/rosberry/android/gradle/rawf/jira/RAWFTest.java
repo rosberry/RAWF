@@ -2,8 +2,6 @@ package com.rosberry.android.gradle.rawf.jira;
 
 import org.junit.Test;
 
-import java.util.logging.Logger;
-
 public class RAWFTest {
 
     private static final String slackUrl = "https://hooks.slack.com/services/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";
@@ -22,9 +20,6 @@ public class RAWFTest {
 
     @Test
     public void getReleaseNotesMessage() {
-        String message = new RAWF().getReleaseNotesMessage(jiraUrl, jiraLogin, jiraToken, projectKey,
-                jiraComponent, jiraStatus);
-        Logger.getLogger("RAWFTest").info("TEST");
-        Logger.getLogger("RAWFTest").info(message);
+        new RAWF().getReleaseNotesMessage(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraStatus);
     }
 }

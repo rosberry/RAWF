@@ -2,7 +2,6 @@ package com.rosberry.android.gradle.rawf.jira;
 
 import com.google.gson.JsonObject;
 import com.rosberry.android.gradle.rawf.jira.model.Issue;
-import org.gradle.internal.impldep.org.apache.http.client.utils.URIBuilder;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -25,6 +24,7 @@ public class JIRAApi {
     private final static String SEARCH_PATH = "search";
     private final static String TRANSITION_PATH = "transitions";
     private final static String SEPARATOR = "/";
+    private final static String AND = "%20AND%20";
 
     private final static String ID_PROPERTY = "id";
     private final static String TRANSITION_PROPERTY = "transition";
@@ -74,17 +74,18 @@ public class JIRAApi {
     }
 
     public String getTitle(String ticketNumber) {
-        if (url.isEmpty()) return ""; //GitUtils.lastCommitMessage();
+        if (url.isEmpty()) return "";
 
         try {
-            URIBuilder builder = new URIBuilder(url);
-            builder.setPath(BASE_PATH + ISSUE_PATH + SEPARATOR + ticketNumber);
+            String issueUrl = url + BASE_PATH + ISSUE_PATH + SEPARATOR + ticketNumber;
 
-            String responseString = sendGet(builder.build().toURL());
-            return jiraModelParser.getTitleFromIssueRawString(responseString);
+            String responseString = sendGet(issueUrl);
+            String title = jiraModelParser.getTitleFromIssueRawString(responseString);
+            System.out.println(title);
+            return title;
         } catch (Exception e) {
             e.printStackTrace();
-            return ""; //GitUtils.lastCommitMessage();
+            return "";
         }
     }
 
@@ -94,26 +95,24 @@ public class JIRAApi {
         try {
             StringBuilder jql = new StringBuilder();
             if (projectKey != null && !projectKey.isEmpty()) {
-                if (jql.length() != 0) jql.append(" AND ");
+                if (jql.length() != 0) jql.append(AND);
                 jql.append("project=").append(projectKey);
             }
             if (componentName != null && !componentName.isEmpty()) {
-                if (jql.length() != 0) jql.append(" AND ");
+                if (jql.length() != 0) jql.append(AND);
                 jql.append("component=").append(componentName);
             }
             if (status != null && !status.isEmpty()) {
-                if (jql.length() != 0) jql.append(" AND ");
+                if (jql.length() != 0) jql.append(AND);
                 jql.append("status=").append(status);
             }
 
-            if (jql.length() != 0) jql.append(" AND ");
-            jql.append("sprint in openSprints()");
+            if (jql.length() != 0) jql.append(AND);
+            jql.append("sprint%20in%20openSprints()");
 
-            URIBuilder builder = new URIBuilder(url);
-            builder.setPath(BASE_PATH + SEARCH_PATH)
-                    .addParameter("jql", jql.toString());
+            String issueUrl = url + BASE_PATH + SEARCH_PATH + "?" + "jql=" + jql.toString();
 
-            String data = sendGet(builder.build().toURL());
+            String data = sendGet(issueUrl);
             return jiraModelParser.getIssueListFromSearchRawString(data);
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,10 +155,12 @@ public class JIRAApi {
         }
     }
 
-    private String sendGet(URL url) throws Exception {
+    private String sendGet(String urlAddress) throws Exception {
         HttpsURLConnection connection = null;
         try {
-            System.out.println("Request url: " + url.toString());
+            System.out.println("Request url: " + url);
+
+            URL url = new URL(urlAddress);
             connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
