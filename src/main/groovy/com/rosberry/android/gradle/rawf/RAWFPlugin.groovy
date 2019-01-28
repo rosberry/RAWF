@@ -25,9 +25,18 @@ class RAWFPlugin implements Plugin<Project> {
         mExtension = project.extensions.create('rawf', RAWFPluginExtension)
 
         project.task('releaseNotes') {
-            def message = new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin,
-                    mExtension.jiraToken, mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraStatus)
-            println(message)
+            doLast {
+                def message = new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin,
+                        mExtension.jiraToken, mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraStatus)
+                project.ext.set("releaseMessage", message)
+            }
+        }
+
+        project.task('doWork') {
+            doLast {
+                new RAWF().doWork(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
+                        mExtension.jiraComponent, mExtension.jiraStatus, mExtension.buildNumber, mExtension.slackUrl)
+            }
         }
 
         project.task('testRAWF') {
