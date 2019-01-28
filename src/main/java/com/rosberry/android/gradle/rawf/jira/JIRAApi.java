@@ -158,7 +158,7 @@ public class JIRAApi {
     private String sendGet(String urlAddress) throws Exception {
         HttpsURLConnection connection = null;
         try {
-            System.out.println("Request url: " + url);
+            System.out.println("Request url: " + urlAddress);
 
             URL url = new URL(urlAddress);
             connection = (HttpsURLConnection) url.openConnection();
