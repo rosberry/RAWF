@@ -14,7 +14,8 @@ class RAWFPluginExtension {
     public String jiraLogin = ""
     public String jiraToken = ""
     public String jiraComponent = ""
-    public String jiraStatus = ""
+    public String jiraFromStatus = ""
+    public String jiraToStatus = ""
     public String buildNumber = "1.0"
     public List<Object> dependsOnTasks = Arrays.asList("build")
 

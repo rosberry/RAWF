@@ -12,13 +12,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Developed by Alexey Korshun at Rosberry
  */
 public class JIRAApi {
-
-    private final static String TRANSITION_ID = "61"; //todo: make dynamic
 
     private final static String BASE_PATH = "/rest/api/3/";
     private final static String ISSUE_PATH = "issue";
@@ -49,28 +48,33 @@ public class JIRAApi {
         this.jiraModelParser = new JiraModelParser();
     }
 
-    public void moveTickets(List<Issue> issues) {
+    public void moveTickets(List<Issue> issues, String toStatus) {
         if (url.isEmpty()) return;
 
         for (Issue issue : issues) {
-            moveTicket(issue.getKey());
+            moveTicket(issue.getKey(), toStatus);
         }
     }
 
-    public void moveTicket(String ticketNumber) {
+    public void moveTicket(String ticketNumber, String toStatus) {
         if (url.isEmpty()) return;
 
-        JsonObject transitionData = new JsonObject();
-        transitionData.addProperty(ID_PROPERTY, TRANSITION_ID);
+        List<Transition> transitions = getTransitions(ticketNumber);
+        for (Transition transition : transitions) {
+            if (Objects.equals(transition.getName(), toStatus)) {
+                JsonObject transitionData = new JsonObject();
+                transitionData.addProperty(ID_PROPERTY, transition.getId());
 
-        JsonObject data = new JsonObject();
-        data.add(TRANSITION_PROPERTY, transitionData);
-        String path = BASE_PATH + ISSUE_PATH + SEPARATOR + ticketNumber + SEPARATOR + TRANSITION_PATH;
+                JsonObject data = new JsonObject();
+                data.add(TRANSITION_PROPERTY, transitionData);
+                String path = BASE_PATH + ISSUE_PATH + SEPARATOR + ticketNumber + SEPARATOR + TRANSITION_PATH;
 
-        try {
-            sendPost(path, data);
-        } catch (Exception e) {
-            e.printStackTrace();
+                try {
+                    sendPost(path, data);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

@@ -27,7 +27,7 @@ class RAWFPlugin implements Plugin<Project> {
         project.task('releaseNotes') {
             doLast {
                 def message = new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin,
-                        mExtension.jiraToken, mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraStatus)
+                        mExtension.jiraToken, mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraFromStatus)
                 new File("$project.projectDir/releaseNotes.txt").text = message
             }
         }
@@ -61,7 +61,8 @@ class RAWFPlugin implements Plugin<Project> {
         boolean shouldDoWork = shouldMonitorTask(task)
         if (shouldDoWork) {
             new RAWF().doWork(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
-                    mExtension.jiraComponent, mExtension.jiraStatus, mExtension.buildNumber, mExtension.slackUrl)
+                    mExtension.jiraComponent, mExtension.jiraFromStatus, mExtension.buildNumber, mExtension.slackUrl,
+                    mExtension.jiraToStatus)
         }
     }
 
