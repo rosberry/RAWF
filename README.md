@@ -19,7 +19,7 @@ repositories {
 
 `apply plugin: "com.rosberry.android.gradle.rawf"`
 
-И добавить блок с настройками, для версии `0.3.8` он выглядит так:
+И добавить блок с настройками, для версии `1.0.0` он выглядит так:
 
 ```groovy
 rawf {
@@ -29,11 +29,12 @@ rawf {
     jiraLogin 'login for jira access' //default: empty (can't access to jira)
     jiraToken '' //default: empty (can't access to jira)
     projectKey '' //default: empty (can't get tickets for empty project)
-    jiraStatus '' //default: empty (get all tickets on board for current project in current component)
+    jiraFromStatus '' //default: empty (get all tickets on board for current project in current component)
+    jiraToStatus '' //default: empty (don't move tickets)
     jiraComponent '' //default: empty (get all tickets on board for current project in current status)
     dependsOnTasks 'for example crashlyticsUploadDistributionDemoDebug' //can be an array, default: build
     buildNumber 'number of your build for use it in notification'
 }
 ```
 
-Плагин добавляет в проект задачу `releaseNotes`, которая устанавливает в проект переменную `releaseMessage` в виде разделенных тасков из JIRA.
+Плагин добавляет в проект задачу `releaseNotes`, которая создает в папке проекта файл `releaseNotes.txt` содержание которого в виде разделенных тасков из JIRA.
