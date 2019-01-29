@@ -9,11 +9,11 @@ import java.util.List;
 public class RAWF {
 
     public void doWork(String jiraUrl, String jiraLogin, String jiraToken, String projectKey, String jiraComponent,
-                       String jiraStatus, String buildNumber, String slackUrl) {
+                       String jiraFromStatus, String buildNumber, String slackUrl, String jiraToStatus) {
 
         JIRAApi jiraApi = new JIRAApi(jiraUrl, jiraLogin, jiraToken);
-        List<Issue> issues = jiraApi.getIssues(projectKey, jiraComponent, jiraStatus);
-        jiraApi.moveTickets(issues);
+        List<Issue> issues = jiraApi.getIssues(projectKey, jiraComponent, jiraFromStatus);
+        jiraApi.moveTickets(issues, jiraToStatus);
 
         NotificationsCreator notificationsCreator = new NotificationsCreator();
         SlackMessage slackMessage = notificationsCreator.createMessage(issues, jiraUrl, buildNumber);

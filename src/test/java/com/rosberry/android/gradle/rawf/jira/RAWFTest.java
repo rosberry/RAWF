@@ -12,10 +12,12 @@ public class RAWFTest {
     private static final String jiraComponent = "android";
     private static final String jiraStatus = "ready";
     private static final String buildNumber = "1.0";
+    private static final String TEST_BUILD = "test build";
 
     @Test
     public void doWork() {
-        new RAWF().doWork(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraStatus, buildNumber, slackUrl);
+        new RAWF().doWork(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraStatus, buildNumber, slackUrl,
+                TEST_BUILD);
     }
 
     @Test

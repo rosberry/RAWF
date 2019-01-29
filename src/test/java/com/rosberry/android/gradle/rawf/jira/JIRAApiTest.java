@@ -22,6 +22,7 @@ public class JIRAApiTest {
     private static final String TICKET_TITLE = "Напиток затреканный во время подсказок не влияет на баланс.";
     private static final String SLACK_URL = "https://hooks.slack.com/services/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";
     private static final String BUILD_NUMBER = "1.0";
+    private static final String TEST_BUILD = "test build";
 
     @Test
     public void getIssues() {
@@ -55,6 +56,12 @@ public class JIRAApiTest {
     public void moveTickets() {
         JIRAApi jiraApi = new JIRAApi(URL, LOGIN, TOKEN);
         List<Issue> issues = jiraApi.getIssues(PROJECT_KEY, PROJECT_COMPONENT, STATUS);
-        jiraApi.moveTickets(issues);
+        jiraApi.moveTickets(issues, TEST_BUILD);
+    }
+
+    @Test
+    public void getTransitions() {
+        JIRAApi jiraApi = new JIRAApi(URL, LOGIN, TOKEN);
+        System.out.println(jiraApi.getTransitions(WB_1262));
     }
 }

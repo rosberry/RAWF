@@ -27,32 +27,13 @@ class RAWFPlugin implements Plugin<Project> {
         project.task('releaseNotes') {
             doLast {
                 def message = new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin,
-                        mExtension.jiraToken, mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraStatus)
-                project.ext.set("releaseMessage", message)
-            }
-        }
-
-        project.task('doWork') {
-            doLast {
-                new RAWF().doWork(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
-                        mExtension.jiraComponent, mExtension.jiraStatus, mExtension.buildNumber, mExtension.slackUrl)
-            }
-        }
-
-        project.task('testRAWF') {
-            doLast {
-                println(mExtension.jiraUrl)
-                println(mExtension.jiraLogin)
-                println(mExtension.jiraToken)
-                println(mExtension.projectKey)
-                println(mExtension.jiraComponent)
-                println(mExtension.jiraStatus)
+                        mExtension.jiraToken, mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraFromStatus)
+                new File("$project.projectDir/releaseNotes.txt").text = message
             }
         }
 
         project.afterEvaluate {
-            if (mExtension.enabled)
-                monitorTasksLifecycle(project)
+            if (mExtension.enabled) monitorTasksLifecycle(project)
         }
     }
 
@@ -80,7 +61,8 @@ class RAWFPlugin implements Plugin<Project> {
         boolean shouldDoWork = shouldMonitorTask(task)
         if (shouldDoWork) {
             new RAWF().doWork(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
-                    mExtension.jiraComponent, mExtension.jiraStatus, mExtension.buildNumber, mExtension.slackUrl)
+                    mExtension.jiraComponent, mExtension.jiraFromStatus, mExtension.buildNumber, mExtension.slackUrl,
+                    mExtension.jiraToStatus)
         }
     }
 
