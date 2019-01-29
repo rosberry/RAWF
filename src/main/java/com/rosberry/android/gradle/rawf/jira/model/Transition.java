@@ -19,6 +19,14 @@ public class Transition {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return "Transition{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
     public static class TransitionBuilder {
         private String id;
         private String name;
