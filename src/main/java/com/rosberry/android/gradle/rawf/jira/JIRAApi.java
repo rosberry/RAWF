@@ -2,6 +2,7 @@ package com.rosberry.android.gradle.rawf.jira;
 
 import com.google.gson.JsonObject;
 import com.rosberry.android.gradle.rawf.jira.model.Issue;
+import com.rosberry.android.gradle.rawf.jira.model.Transition;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
@@ -114,6 +115,20 @@ public class JIRAApi {
 
             String data = sendGet(issueUrl);
             return jiraModelParser.getIssueListFromSearchRawString(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Transition> getTransitions(String ticketKey) {
+        if (url.isEmpty()) return new ArrayList<>();
+
+        try {
+            String issueUrl = url + BASE_PATH + ISSUE_PATH + SEPARATOR + ticketKey + SEPARATOR + TRANSITION_PATH;
+
+            String data = sendGet(issueUrl);
+            return jiraModelParser.getTransitionListFromResponse(data);
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();

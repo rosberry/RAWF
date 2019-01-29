@@ -57,4 +57,10 @@ public class JIRAApiTest {
         List<Issue> issues = jiraApi.getIssues(PROJECT_KEY, PROJECT_COMPONENT, STATUS);
         jiraApi.moveTickets(issues);
     }
+
+    @Test
+    public void getTransitions() {
+        JIRAApi jiraApi = new JIRAApi(URL, LOGIN, TOKEN);
+        System.out.println(jiraApi.getTransitions(WB_1262));
+    }
 }
