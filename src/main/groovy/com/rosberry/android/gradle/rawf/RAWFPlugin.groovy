@@ -3,7 +3,6 @@
  */
 package com.rosberry.android.gradle.rawf
 
-
 import com.rosberry.android.gradle.rawf.jira.RAWF
 import org.gradle.api.Plugin
 import org.gradle.api.Project

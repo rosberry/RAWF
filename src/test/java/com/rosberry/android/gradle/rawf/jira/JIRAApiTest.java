@@ -13,8 +13,8 @@ import static org.junit.Assert.assertTrue;
 public class JIRAApiTest {
 
     private static final String URL = "https://rosberry.atlassian.net";
-    private static final String LOGIN = "alexey.korshun@rosberry.com";
-    private static final String TOKEN = "GNs2mV6X0Qm5S9PVTbp1FA29";
+    private static final String LOGIN = "ci@rosberry.com";
+    private static final String TOKEN = "heuYUc4DoigeZBDtuktU6467";
     private static final String PROJECT_KEY = "ALCO";
     private static final String PROJECT_COMPONENT = "android";
     private static final String STATUS = "ready";
@@ -22,7 +22,7 @@ public class JIRAApiTest {
     private static final String TICKET_TITLE = "Напиток затреканный во время подсказок не влияет на баланс.";
     private static final String SLACK_URL = "https://hooks.slack.com/services/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";
     private static final String BUILD_NUMBER = "1.0";
-    private static final String TEST_BUILD = "test build";
+    private static final String TEST_BUILD = "Test Build";
 
     @Test
     public void getIssues() {
