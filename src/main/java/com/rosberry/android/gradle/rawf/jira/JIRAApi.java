@@ -113,7 +113,7 @@ public class JIRAApi {
             }
 
             if (jql.length() != 0) jql.append(AND);
-            jql.append("sprint%20in%20openSprints()");
+            jql.append("sprint%20in%20openSprints%28%29");
 
             String issueUrl = url + BASE_PATH + SEARCH_PATH + "?" + "jql=" + jql.toString();
 
