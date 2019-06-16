@@ -16,20 +16,14 @@ import org.gradle.api.tasks.TaskState
  */
 class RAWFPlugin implements Plugin<Project> {
 
-    RAWFPluginExtension mExtension
-    StringBuilder mTaskLogBuilder
+    private RAWFPluginExtension mExtension
+    private StringBuilder mTaskLogBuilder
 
     void apply(Project project) {
         mTaskLogBuilder = new StringBuilder()
         mExtension = project.extensions.create('rawf', RAWFPluginExtension)
 
-        project.task('releaseNotes') {
-            doLast {
-                def message = new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin,
-                        mExtension.jiraToken, mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraFromStatus)
-                new File("$project.projectDir/releaseNotes.txt").text = message
-            }
-        }
+        project.task('releaseNotes') { doLast { createReleaseNotes(project) } }
 
         project.afterEvaluate {
             if (mExtension.enabled) monitorTasksLifecycle(project)
@@ -50,14 +44,14 @@ class RAWFPlugin implements Plugin<Project> {
 
             @Override
             void afterExecute(Task task, TaskState state) {
-                handleTaskFinished(task)
+                handleTaskFinished(task, state)
             }
         })
     }
 
-    void handleTaskFinished(Task task) {
+    void handleTaskFinished(Task task, TaskState state) {
 
-        boolean shouldDoWork = shouldMonitorTask(task)
+        boolean shouldDoWork = shouldMonitorTask(task, state)
         if (shouldDoWork) {
             new RAWF().doWork(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
                     mExtension.jiraComponent, mExtension.jiraFromStatus, mExtension.buildNumber, mExtension.slackUrl,
@@ -65,10 +59,16 @@ class RAWFPlugin implements Plugin<Project> {
         }
     }
 
-    boolean shouldMonitorTask(Task task) {
+    boolean shouldMonitorTask(Task task, TaskState state) {
         for (dependentTask in mExtension.dependsOnTasks) {
-            if (task.getName() == dependentTask) return true
+            if (task.getName() == dependentTask && state.didWork) return true
         }
         return false
+    }
+
+    private void createReleaseNotes(Project project) {
+        def message = new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin,
+                mExtension.jiraToken, mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraFromStatus)
+        new File("$project.projectDir/releaseNotes.txt").text = message
     }
 }
