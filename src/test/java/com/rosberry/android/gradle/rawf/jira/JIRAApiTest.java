@@ -15,7 +15,7 @@ public class JIRAApiTest {
     private static final String URL = "https://rosberry.atlassian.net";
     private static final String LOGIN = "ci@rosberry.com";
     private static final String TOKEN = "heuYUc4DoigeZBDtuktU6467";
-    private static final String PROJECT_KEY = "TRIP";
+    private static final String PROJECT_KEY = "LIV";
     private static final String PROJECT_COMPONENT = "Android";
     private static final String STATUS = "Ready";
     private static final String WB_1262 = "WB-1262";
