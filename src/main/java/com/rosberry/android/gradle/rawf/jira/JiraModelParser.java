@@ -39,6 +39,7 @@ class JiraModelParser {
             for (int i = 0; i < jsonIssues.size(); i++) {
                 JsonObject jsonIssue = jsonIssues.get(i).getAsJsonObject();
 
+                int id = 0;
                 String key = "";
                 String title = "";
                 String type = "";
@@ -59,10 +60,14 @@ class JiraModelParser {
                         if (jsonIssueType.has(NAME)) {
                             type = jsonIssueType.get(NAME).getAsString();
                         }
+                        if (jsonIssueType.has(ID)) {
+                            id = jsonIssueType.get(ID).getAsInt();
+                        }
                     }
                 }
 
                 Issue issue = new Issue.Builder()
+                        .setId(id)
                         .setKey(key)
                         .setTitle(title)
                         .setType(type)

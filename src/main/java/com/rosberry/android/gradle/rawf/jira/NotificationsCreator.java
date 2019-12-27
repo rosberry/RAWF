@@ -12,7 +12,6 @@ public class NotificationsCreator {
     private static final String TITLE_DEFAULT = "New Build: ";
     private static final String COLOR_PASSED = "good";
     private static final String COLOR_BAD = "danger";
-    private static final String BUG = "bug";
 
     public SlackMessage createMessage(List<Issue> issues, String jiraHost, String buildNumber) {
         String title = TITLE_DEFAULT + buildNumber;
@@ -31,7 +30,7 @@ public class NotificationsCreator {
     private SlackAttachment makeFeatureAttachment(List<Issue> issues, String jiraHost) {
         StringBuilder message = new StringBuilder();
         for (Issue issue : issues) {
-            if (!issue.getType().toLowerCase().equals(BUG)) {
+            if (issue.getId() != Issue.ID_BUG && issue.getId() != Issue.ID_SUB_BUG) {
                 String url = generateTicketUrl(jiraHost, issue);
                 if (message.length() > 0) message.append("\n");
                 appendMessageDescription(message, issue, url);
@@ -47,7 +46,7 @@ public class NotificationsCreator {
     private SlackAttachment makeBugAttachment(List<Issue> issues, String jiraHost) {
         StringBuilder message = new StringBuilder();
         for (Issue issue : issues) {
-            if (issue.getType().toLowerCase().equals(BUG)) {
+            if (issue.getId() == Issue.ID_BUG || issue.getId() == Issue.ID_SUB_BUG) {
                 String url = generateTicketUrl(jiraHost, issue);
                 if (message.length() > 0) message.append("\n");
                 appendMessageDescription(message, issue, url);
