@@ -10,6 +10,8 @@ import java.util.List;
 public class NotificationsCreator {
 
     private static final String TITLE_DEFAULT = "New Build: ";
+    private static final String TITLE_ERROR = ":rotating_light: :rotating_light: :rotating_light: Build was failed :rotating_light: :rotating_light: :rotating_light:";
+    private static final String MESSAGE_ERROR = "See more details on ";
     private static final String COLOR_PASSED = "good";
     private static final String COLOR_BAD = "danger";
 
@@ -24,6 +26,13 @@ public class NotificationsCreator {
         if (bugAttachment != null) slackMessage.addAttachments(bugAttachment);
 
         return slackMessage;
+    }
+
+    public SlackMessage createErrorMessage(String buildInformationUrl) {
+        String textMessage = TITLE_ERROR +
+                "\n" +
+                MESSAGE_ERROR + formattedErrorMessage(buildInformationUrl);
+        return new SlackMessage(textMessage);
     }
 
     @Nullable
@@ -66,6 +75,10 @@ public class NotificationsCreator {
                 .append(issue.getKey())
                 .append(">: ")
                 .append(issue.getTitle());
+    }
+
+    private String formattedErrorMessage(String url) {
+        return "<" + url + "|" + "*CI site*" + ">";
     }
 
     private String generateTicketUrl(String jiraHost, Issue issue) {

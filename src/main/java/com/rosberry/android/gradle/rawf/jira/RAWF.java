@@ -38,4 +38,11 @@ public class RAWF {
         System.out.println(message.toString());
         return message.toString();
     }
+
+    public static void sendErrorMessage(String slackUrl) {
+        NotificationsCreator notificationsCreator = new NotificationsCreator();
+        SlackMessage slackMessage = notificationsCreator.createErrorMessage("");
+        SlackApi api = new SlackApi(slackUrl);
+        api.call(slackMessage);
+    }
 }

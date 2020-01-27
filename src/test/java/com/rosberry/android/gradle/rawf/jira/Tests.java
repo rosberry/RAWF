@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class JIRAApiTest {
+public class Tests {
 
     private static final String URL = "https://rosberry.atlassian.net";
     private static final String LOGIN = "ci@rosberry.com";
@@ -40,13 +40,22 @@ public class JIRAApiTest {
     }
 
     @Test
-    public void createMessage() {
+    public void sendMessage() {
         JIRAApi jiraApi = new JIRAApi(URL, LOGIN, TOKEN);
 
         List<Issue> response = jiraApi.getIssues(PROJECT_KEY, PROJECT_COMPONENT, STATUS);
 
         NotificationsCreator creator = new NotificationsCreator();
         SlackMessage slackMessage = creator.createMessage(response, URL, BUILD_NUMBER);
+        SlackApi api = new SlackApi(SLACK_URL);
+        api.call(slackMessage);
+        assertTrue(true);
+    }
+
+    @Test
+    public void sendErrorMessage() {
+        NotificationsCreator creator = new NotificationsCreator();
+        SlackMessage slackMessage = creator.createErrorMessage(URL);
         SlackApi api = new SlackApi(SLACK_URL);
         api.call(slackMessage);
         assertTrue(true);

@@ -8,7 +8,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.execution.TaskExecutionListener
-import org.gradle.api.logging.StandardOutputListener
 import org.gradle.api.tasks.TaskState
 
 /**
@@ -17,10 +16,8 @@ import org.gradle.api.tasks.TaskState
 class RAWFPlugin implements Plugin<Project> {
 
     private RAWFPluginExtension mExtension
-    private StringBuilder mTaskLogBuilder
 
     void apply(Project project) {
-        mTaskLogBuilder = new StringBuilder()
         mExtension = project.extensions.create('rawf', RAWFPluginExtension)
 
         project.task('releaseNotes') { doLast { createReleaseNotes(project) } }
@@ -31,25 +28,28 @@ class RAWFPlugin implements Plugin<Project> {
     }
 
     void monitorTasksLifecycle(Project project) {
-        project.getGradle().getTaskGraph().addTaskExecutionListener(new TaskExecutionListener() {
-            @Override
-            void beforeExecute(Task task) {
-                task.logging.addStandardOutputListener(new StandardOutputListener() {
-                    @Override
-                    void onOutput(CharSequence charSequence) {
-                        mTaskLogBuilder.append(charSequence)
-                    }
-                })
-            }
+        project.getGradle()
+                .getTaskGraph()
+                .addTaskExecutionListener(
+                        new TaskExecutionListener() {
+                            @Override
+                            void beforeExecute(Task task) {
+                            }
 
-            @Override
-            void afterExecute(Task task, TaskState state) {
-                handleTaskFinished(task, state)
-            }
-        })
+                            @Override
+                            void afterExecute(Task task, TaskState state) {
+                                handleTaskFinished(task, state)
+                            }
+                        }
+                )
     }
 
     void handleTaskFinished(Task task, TaskState state) {
+
+        if (state.getFailure() != null) {
+            RAWF.sendErrorMessage(mExtension.errorSlackUrl)
+            return
+        }
 
         boolean shouldDoWork = shouldMonitorTask(task, state)
         if (shouldDoWork) {
@@ -67,8 +67,8 @@ class RAWFPlugin implements Plugin<Project> {
     }
 
     private void createReleaseNotes(Project project) {
-        def message = new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin,
-                mExtension.jiraToken, mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraFromStatus)
+        def message = new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken,
+                mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraFromStatus)
         new File("$project.projectDir/releaseNotes.txt").text = message
     }
 }
