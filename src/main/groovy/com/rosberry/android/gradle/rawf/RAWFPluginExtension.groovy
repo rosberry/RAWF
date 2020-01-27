@@ -9,6 +9,7 @@ package com.rosberry.android.gradle.rawf
 class RAWFPluginExtension {
     public boolean enabled = true
     public String slackUrl = ""
+    public String errorSlackUrl = ""
     public String jiraUrl = ""
     public String projectKey = ""
     public String jiraLogin = ""

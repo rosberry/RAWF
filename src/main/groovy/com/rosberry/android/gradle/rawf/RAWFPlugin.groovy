@@ -46,6 +46,11 @@ class RAWFPlugin implements Plugin<Project> {
 
     void handleTaskFinished(Task task, TaskState state) {
 
+        if (state.getFailure() != null) {
+            RAWF.sendErrorMessage(mExtension.errorSlackUrl)
+            return
+        }
+
         boolean shouldDoWork = shouldMonitorTask(task, state)
         if (shouldDoWork) {
             new RAWF().doWork(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
