@@ -34,7 +34,7 @@ public class RAWF {
         this.jiraToStatus = jiraToStatus;
     }
 
-    public void doWork() {
+    public void sendNotificationMessage() {
         List<Issue> issues = getIssues(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraFromStatus);
 
         NotificationsCreator notificationsCreator = new NotificationsCreator();
@@ -42,11 +42,6 @@ public class RAWF {
 
         SlackApi api = new SlackApi(slackUrl);
         api.call(slackMessage);
-    }
-
-    private List<Issue> getIssues(String jiraUrl, String jiraLogin, String jiraToken, String projectKey, String jiraComponent, String jiraFromStatus) {
-        JIRAApi jiraApi = new JIRAApi(jiraUrl, jiraLogin, jiraToken);
-        return jiraApi.getIssues(projectKey, jiraComponent, jiraFromStatus);
     }
 
     public String getReleaseNotesMessage() {
@@ -75,5 +70,11 @@ public class RAWF {
         SlackMessage slackMessage = notificationsCreator.createErrorMessage("");
         SlackApi api = new SlackApi(errorSlackUrl);
         api.call(slackMessage);
+    }
+
+    private List<Issue> getIssues(String jiraUrl, String jiraLogin, String jiraToken, String projectKey,
+                                  String jiraComponent, String jiraFromStatus) {
+        JIRAApi jiraApi = new JIRAApi(jiraUrl, jiraLogin, jiraToken);
+        return jiraApi.getIssues(projectKey, jiraComponent, jiraFromStatus);
     }
 }

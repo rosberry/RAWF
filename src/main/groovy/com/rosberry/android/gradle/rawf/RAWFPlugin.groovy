@@ -16,7 +16,7 @@ import org.gradle.api.tasks.TaskState
 class RAWFPlugin implements Plugin<Project> {
 
     private RAWFPluginExtension mExtension
-    private RAWF core;
+    private RAWF core
 
     void apply(Project project) {
         mExtension = project.extensions.create('rawf', RAWFPluginExtension)
@@ -43,14 +43,13 @@ class RAWFPlugin implements Plugin<Project> {
 
                             @Override
                             void afterExecute(Task task, TaskState state) {
-                                handleTaskFinished(task, state)
+                                handleTaskFinished(task, state, project)
                             }
                         }
                 )
     }
 
-    void handleTaskFinished(Task task, TaskState state) {
-
+    void handleTaskFinished(Task task, TaskState state, Project project) {
         if (state.getFailure() != null) {
             core.sendErrorMessage()
             return
@@ -58,7 +57,8 @@ class RAWFPlugin implements Plugin<Project> {
 
         boolean shouldDoWork = shouldMonitorTask(task, state)
         if (shouldDoWork) {
-            core.doWork()
+            createReleaseNotes(project)
+            core.sendNotificationMessage()
         }
     }
 
