@@ -59,6 +59,7 @@ class RAWFPlugin implements Plugin<Project> {
         if (shouldDoWork) {
             createReleaseNotes(project)
             core.sendNotificationMessage()
+            core.moveTickets()
         }
     }
 
