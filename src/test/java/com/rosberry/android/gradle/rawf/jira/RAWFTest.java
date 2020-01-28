@@ -16,12 +16,12 @@ public class RAWFTest {
 
     @Test
     public void doWork() {
-        new RAWF().doWork(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraStatus, buildNumber, slackUrl,
+        new RAWF(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraFromStatus, buildNumber, slackUrl, jiraToStatus).doWork(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraStatus, buildNumber, slackUrl,
                 TEST_BUILD);
     }
 
     @Test
     public void getReleaseNotesMessage() {
-        new RAWF().getReleaseNotesMessage(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraStatus);
+        new RAWF(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraFromStatus, buildNumber, slackUrl, jiraToStatus).getReleaseNotesMessage(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraStatus);
     }
 }

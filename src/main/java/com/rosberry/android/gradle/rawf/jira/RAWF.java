@@ -8,12 +8,34 @@ import java.util.List;
 
 public class RAWF {
 
-    public void doWork(String jiraUrl, String jiraLogin, String jiraToken, String projectKey, String jiraComponent,
-                       String jiraFromStatus, String buildNumber, String slackUrl, String jiraToStatus) {
+    private final String jiraUrl;
+    private final String jiraLogin;
+    private final String jiraToken;
+    private final String projectKey;
+    private final String jiraComponent;
+    private final String jiraFromStatus;
+    //maybe we need make it not final.
+    private final String buildNumber;
+    private final String slackUrl;
+    private final String errorSlackUrl;
+    private final String jiraToStatus;
 
-        JIRAApi jiraApi = new JIRAApi(jiraUrl, jiraLogin, jiraToken);
-        List<Issue> issues = jiraApi.getIssues(projectKey, jiraComponent, jiraFromStatus);
-        jiraApi.moveTickets(issues, jiraToStatus);
+    public RAWF(String jiraUrl, String jiraLogin, String jiraToken, String projectKey, String jiraComponent,
+                String jiraFromStatus, String buildNumber, String slackUrl, String errorSlackUrl, String jiraToStatus) {
+        this.jiraUrl = jiraUrl;
+        this.jiraLogin = jiraLogin;
+        this.jiraToken = jiraToken;
+        this.projectKey = projectKey;
+        this.jiraComponent = jiraComponent;
+        this.jiraFromStatus = jiraFromStatus;
+        this.buildNumber = buildNumber;
+        this.slackUrl = slackUrl;
+        this.errorSlackUrl = errorSlackUrl;
+        this.jiraToStatus = jiraToStatus;
+    }
+
+    public void doWork() {
+        List<Issue> issues = getIssues(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraFromStatus);
 
         NotificationsCreator notificationsCreator = new NotificationsCreator();
         SlackMessage slackMessage = notificationsCreator.createMessage(issues, jiraUrl, buildNumber);
@@ -22,10 +44,13 @@ public class RAWF {
         api.call(slackMessage);
     }
 
-    public String getReleaseNotesMessage(String jiraUrl, String jiraLogin, String jiraToken, String projectKey,
-                                         String jiraComponent, String jiraStatus) {
+    private List<Issue> getIssues(String jiraUrl, String jiraLogin, String jiraToken, String projectKey, String jiraComponent, String jiraFromStatus) {
         JIRAApi jiraApi = new JIRAApi(jiraUrl, jiraLogin, jiraToken);
-        List<Issue> issues = jiraApi.getIssues(projectKey, jiraComponent, jiraStatus);
+        return jiraApi.getIssues(projectKey, jiraComponent, jiraFromStatus);
+    }
+
+    public String getReleaseNotesMessage() {
+        List<Issue> issues = getIssues(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraFromStatus);
 
         StringBuilder message = new StringBuilder();
         for (Issue issue : issues) {
@@ -39,10 +64,16 @@ public class RAWF {
         return message.toString();
     }
 
-    public static void sendErrorMessage(String slackUrl) {
+    public void moveTickets() {
+        JIRAApi jiraApi = new JIRAApi(jiraUrl, jiraLogin, jiraToken);
+        List<Issue> issues = jiraApi.getIssues(projectKey, jiraComponent, jiraFromStatus);
+        jiraApi.moveTickets(issues, jiraToStatus);
+    }
+
+    public void sendErrorMessage() {
         NotificationsCreator notificationsCreator = new NotificationsCreator();
         SlackMessage slackMessage = notificationsCreator.createErrorMessage("");
-        SlackApi api = new SlackApi(slackUrl);
+        SlackApi api = new SlackApi(errorSlackUrl);
         api.call(slackMessage);
     }
 }

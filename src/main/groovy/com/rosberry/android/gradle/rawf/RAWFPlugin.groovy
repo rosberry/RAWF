@@ -16,11 +16,16 @@ import org.gradle.api.tasks.TaskState
 class RAWFPlugin implements Plugin<Project> {
 
     private RAWFPluginExtension mExtension
+    private RAWF core;
 
     void apply(Project project) {
         mExtension = project.extensions.create('rawf', RAWFPluginExtension)
+        core = new RAWF(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
+                mExtension.jiraComponent, mExtension.jiraFromStatus, mExtension.buildNumber, mExtension.slackUrl,
+                mExtension.errorSlackUrl, mExtension.jiraToStatus)
 
         project.task('releaseNotes') { doLast { createReleaseNotes(project) } }
+        project.task('moveTickets') { doLast { createReleaseNotes(project) } }
 
         project.afterEvaluate {
             if (mExtension.enabled) monitorTasksLifecycle(project)
@@ -47,15 +52,13 @@ class RAWFPlugin implements Plugin<Project> {
     void handleTaskFinished(Task task, TaskState state) {
 
         if (state.getFailure() != null) {
-            RAWF.sendErrorMessage(mExtension.errorSlackUrl)
+            core.sendErrorMessage()
             return
         }
 
         boolean shouldDoWork = shouldMonitorTask(task, state)
         if (shouldDoWork) {
-            new RAWF().doWork(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
-                    mExtension.jiraComponent, mExtension.jiraFromStatus, mExtension.buildNumber, mExtension.slackUrl,
-                    mExtension.jiraToStatus)
+            core.doWork()
         }
     }
 
@@ -67,8 +70,7 @@ class RAWFPlugin implements Plugin<Project> {
     }
 
     private void createReleaseNotes(Project project) {
-        def message = new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken,
-                mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraFromStatus)
+        def message = core.getReleaseNotesMessage()
         new File("$project.projectDir/releaseNotes.txt").text = message
     }
 }
