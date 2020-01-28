@@ -16,13 +16,20 @@ import org.gradle.api.tasks.TaskState
 class RAWFPlugin implements Plugin<Project> {
 
     private RAWFPluginExtension mExtension
+    private RAWF core
 
     void apply(Project project) {
         mExtension = project.extensions.create('rawf', RAWFPluginExtension)
 
         project.task('releaseNotes') { doLast { createReleaseNotes(project) } }
+        project.task('moveTickets') { doLast { moveTickets() } }
+        project.task('sendNotification') { doLast { sendNotification() } }
 
         project.afterEvaluate {
+            core = new RAWF(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
+                    mExtension.jiraComponent, mExtension.jiraFromStatus, mExtension.buildNumber, mExtension.slackUrl,
+                    mExtension.errorSlackUrl, mExtension.jiraToStatus)
+
             if (mExtension.enabled) monitorTasksLifecycle(project)
         }
     }
@@ -38,24 +45,23 @@ class RAWFPlugin implements Plugin<Project> {
 
                             @Override
                             void afterExecute(Task task, TaskState state) {
-                                handleTaskFinished(task, state)
+                                handleTaskFinished(task, state, project)
                             }
                         }
                 )
     }
 
-    void handleTaskFinished(Task task, TaskState state) {
-
+    void handleTaskFinished(Task task, TaskState state, Project project) {
         if (state.getFailure() != null) {
-            RAWF.sendErrorMessage(mExtension.errorSlackUrl)
+            core.sendErrorMessage()
             return
         }
 
         boolean shouldDoWork = shouldMonitorTask(task, state)
         if (shouldDoWork) {
-            new RAWF().doWork(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
-                    mExtension.jiraComponent, mExtension.jiraFromStatus, mExtension.buildNumber, mExtension.slackUrl,
-                    mExtension.jiraToStatus)
+            createReleaseNotes(project)
+            core.sendNotificationMessage()
+            core.moveTickets()
         }
     }
 
@@ -66,9 +72,16 @@ class RAWFPlugin implements Plugin<Project> {
         return false
     }
 
-    private void createReleaseNotes(Project project) {
-        def message = new RAWF().getReleaseNotesMessage(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken,
-                mExtension.projectKey, mExtension.jiraComponent, mExtension.jiraFromStatus)
+    void createReleaseNotes(Project project) {
+        def message = core.getReleaseNotesMessage()
         new File("$project.projectDir/releaseNotes.txt").text = message
+    }
+
+    void moveTickets() {
+        core.moveTickets()
+    }
+
+    void sendNotification() {
+        core.sendNotificationMessage()
     }
 }

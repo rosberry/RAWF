@@ -1,7 +1,8 @@
 plugins {
     id 'groovy'
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.10.0'
+    id 'com.gradle.plugin-publish' version '0.10.1'
+    id 'maven-publish'
 }
 
 group 'com.rosberry.android.gradle'
@@ -20,20 +21,26 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
+publishing {
+    repositories {
+        mavenLocal()
+    }
+}
+
 gradlePlugin {
     plugins {
         rawfPlugin {
             id = 'com.rosberry.android.gradle.rawf'
             displayName = 'RAWF'
             description = 'Plugin for rosberry android workflow'
-            version = '1.3.1'
+            version = '1.4.0'
             implementationClass = 'com.rosberry.android.gradle.rawf.RAWFPlugin'
         }
     }
 }
 
 pluginBundle {
-    website = 'https://gitlab.com/lehakorshun/rawf'
-    vcsUrl = 'https://gitlab.com/lehakorshun/rawf.git'
+    website = 'https://github.com/rosberry/RAWF'
+    vcsUrl = 'https://github.com/rosberry/RAWF.git'
     tags = ['slack', 'build', 'notify', 'jira']
 }
