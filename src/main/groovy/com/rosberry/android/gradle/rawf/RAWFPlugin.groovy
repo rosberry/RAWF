@@ -20,15 +20,16 @@ class RAWFPlugin implements Plugin<Project> {
 
     void apply(Project project) {
         mExtension = project.extensions.create('rawf', RAWFPluginExtension)
-        core = new RAWF(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
-                mExtension.jiraComponent, mExtension.jiraFromStatus, mExtension.buildNumber, mExtension.slackUrl,
-                mExtension.errorSlackUrl, mExtension.jiraToStatus)
 
         project.task('releaseNotes') { doLast { createReleaseNotes(project) } }
         project.task('moveTickets') { doLast { moveTickets() } }
         project.task('sendNotification') { doLast { sendNotification() } }
 
         project.afterEvaluate {
+            core = new RAWF(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
+                    mExtension.jiraComponent, mExtension.jiraFromStatus, mExtension.buildNumber, mExtension.slackUrl,
+                    mExtension.errorSlackUrl, mExtension.jiraToStatus)
+
             if (mExtension.enabled) monitorTasksLifecycle(project)
         }
     }
