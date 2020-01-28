@@ -19,6 +19,7 @@ public class JIRAApi {
     private final static String TRANSITION_PATH = "transitions";
     private final static String SEPARATOR = "/";
     private final static String AND = "%20AND%20";
+    private final static String QUOTE_MARK = "%27";
 
     private final static String ID_PROPERTY = "id";
     private final static String TRANSITION_PROPERTY = "transition";
@@ -80,7 +81,7 @@ public class JIRAApi {
             StringBuilder jql = new StringBuilder();
             if (projectKey != null && !projectKey.isEmpty()) {
                 if (jql.length() != 0) jql.append(AND);
-                jql.append("project=").append(projectKey);
+                jql.append("project=").append(QUOTE_MARK).append(projectKey).append(QUOTE_MARK);
             }
             if (componentName != null && !componentName.isEmpty()) {
                 if (jql.length() != 0) jql.append(AND);
