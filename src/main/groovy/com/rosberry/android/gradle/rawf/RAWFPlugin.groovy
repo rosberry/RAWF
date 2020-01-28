@@ -25,7 +25,8 @@ class RAWFPlugin implements Plugin<Project> {
                 mExtension.errorSlackUrl, mExtension.jiraToStatus)
 
         project.task('releaseNotes') { doLast { createReleaseNotes(project) } }
-        project.task('moveTickets') { doLast { createReleaseNotes(project) } }
+        project.task('moveTickets') { doLast { moveTickets() } }
+        project.task('sendNotification') { doLast { sendNotification() } }
 
         project.afterEvaluate {
             if (mExtension.enabled) monitorTasksLifecycle(project)
@@ -70,8 +71,16 @@ class RAWFPlugin implements Plugin<Project> {
         return false
     }
 
-    private void createReleaseNotes(Project project) {
+    void createReleaseNotes(Project project) {
         def message = core.getReleaseNotesMessage()
         new File("$project.projectDir/releaseNotes.txt").text = message
+    }
+
+    void moveTickets() {
+        core.moveTickets()
+    }
+
+    void sendNotification() {
+        core.sendNotificationMessage()
     }
 }
