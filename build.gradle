@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.rosberry.android.gradle'
-version '1.0.0'
+version '1.4.0'
 
 sourceCompatibility = 1.8
 
@@ -19,12 +19,6 @@ dependencies {
     implementation localGroovy()
     implementation 'com.google.code.gson:gson:2.8.0'
     testImplementation 'junit:junit:4.12'
-}
-
-publishing {
-    repositories {
-        mavenLocal()
-    }
 }
 
 gradlePlugin {
