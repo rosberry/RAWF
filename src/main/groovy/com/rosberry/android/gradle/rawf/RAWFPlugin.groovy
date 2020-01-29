@@ -45,18 +45,19 @@ class RAWFPlugin implements Plugin<Project> {
 
                             @Override
                             void afterExecute(Task task, TaskState state) {
-                                handleTaskFinished(task, state, project)
+                                handleTaskFinished(task, state)
                             }
                         }
                 )
+
+        project.gradle.buildFinished { result ->
+            if (result.failure != null) {
+                core.sendErrorMessage()
+            }
+        }
     }
 
-    void handleTaskFinished(Task task, TaskState state, Project project) {
-        if (state.getFailure() != null) {
-            core.sendErrorMessage()
-            return
-        }
-
+    void handleTaskFinished(Task task, TaskState state) {
         boolean shouldDoWork = shouldMonitorTask(task, state)
         if (shouldDoWork) {
             core.sendNotificationMessage()
