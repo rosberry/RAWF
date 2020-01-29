@@ -29,9 +29,14 @@ public class NotificationsCreator {
     }
 
     public SlackMessage createErrorMessage(String buildInformationUrl) {
-        String textMessage = TITLE_ERROR +
-                "\n" +
-                MESSAGE_ERROR + formattedErrorMessage(buildInformationUrl);
+        String textMessage;
+        if (buildInformationUrl != null && !buildInformationUrl.equals("")) {
+            textMessage = TITLE_ERROR +
+                    "\n" +
+                    MESSAGE_ERROR + formattedErrorMessage(buildInformationUrl);
+        } else {
+            textMessage = TITLE_ERROR;
+        }
         return new SlackMessage(textMessage);
     }
 

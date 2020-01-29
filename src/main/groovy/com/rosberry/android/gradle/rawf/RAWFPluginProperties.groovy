@@ -6,7 +6,7 @@ package com.rosberry.android.gradle.rawf
 /**
  * Created by Alexey Korshun on 08/07/18.
  */
-class RAWFPluginExtension {
+class RAWFPluginProperties {
     public boolean enabled = true
     public String slackUrl = ""
     public String errorSlackUrl = ""
@@ -18,6 +18,7 @@ class RAWFPluginExtension {
     public String jiraFromStatus = ""
     public String jiraToStatus = ""
     public String buildNumber = "1.0"
+    public String buildInformationUrl = ""
     public List<Object> dependsOnTasks = Arrays.asList("build")
 
     public void dependsOnTasks(Object... paths) {

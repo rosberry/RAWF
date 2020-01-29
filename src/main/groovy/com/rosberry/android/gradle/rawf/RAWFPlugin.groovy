@@ -15,22 +15,23 @@ import org.gradle.api.tasks.TaskState
  */
 class RAWFPlugin implements Plugin<Project> {
 
-    private RAWFPluginExtension mExtension
+    private RAWFPluginProperties pluginProperties
     private RAWF core
 
     void apply(Project project) {
-        mExtension = project.extensions.create('rawf', RAWFPluginExtension)
+        pluginProperties = project.extensions.create('rawf', RAWFPluginProperties)
 
         project.task('releaseNotes') { doLast { createReleaseNotes(project) } }
         project.task('moveTickets') { doLast { moveTickets() } }
         project.task('sendNotification') { doLast { sendNotification() } }
 
         project.afterEvaluate {
-            core = new RAWF(mExtension.jiraUrl, mExtension.jiraLogin, mExtension.jiraToken, mExtension.projectKey,
-                    mExtension.jiraComponent, mExtension.jiraFromStatus, mExtension.buildNumber, mExtension.slackUrl,
-                    mExtension.errorSlackUrl, mExtension.jiraToStatus)
+            core = new RAWF(pluginProperties.jiraUrl, pluginProperties.jiraLogin, pluginProperties.jiraToken, pluginProperties.projectKey,
+                    pluginProperties.jiraComponent, pluginProperties.jiraFromStatus, pluginProperties.buildNumber,
+                    pluginProperties.slackUrl, pluginProperties.errorSlackUrl, pluginProperties.jiraToStatus,
+                    pluginProperties.buildInformationUrl)
 
-            if (mExtension.enabled) monitorTasksLifecycle(project)
+            if (pluginProperties.enabled) monitorTasksLifecycle(project)
         }
     }
 
@@ -45,28 +46,28 @@ class RAWFPlugin implements Plugin<Project> {
 
                             @Override
                             void afterExecute(Task task, TaskState state) {
-                                handleTaskFinished(task, state, project)
+                                handleTaskFinished(task, state)
                             }
                         }
                 )
+
+        project.gradle.buildFinished { result ->
+            if (result.failure != null) {
+                core.sendErrorMessage()
+            }
+        }
     }
 
-    void handleTaskFinished(Task task, TaskState state, Project project) {
-        if (state.getFailure() != null) {
-            core.sendErrorMessage()
-            return
-        }
-
+    void handleTaskFinished(Task task, TaskState state) {
         boolean shouldDoWork = shouldMonitorTask(task, state)
         if (shouldDoWork) {
-            createReleaseNotes(project)
             core.sendNotificationMessage()
             core.moveTickets()
         }
     }
 
     boolean shouldMonitorTask(Task task, TaskState state) {
-        for (dependentTask in mExtension.dependsOnTasks) {
+        for (dependentTask in pluginProperties.dependsOnTasks) {
             if (task.getName() == dependentTask && state.didWork) return true
         }
         return false
