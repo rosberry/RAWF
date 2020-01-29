@@ -21,6 +21,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
+publishing {
+    repositories {
+        mavenLocal()
+    }
+}
+
 gradlePlugin {
     plugins {
         rawfPlugin {

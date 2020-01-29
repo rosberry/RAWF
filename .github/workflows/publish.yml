@@ -16,7 +16,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew assemble --no-daemon
       - name: Publish
-        run: ./gradlew publish -Pgradle.publish.key=$KEY -Pgradle.publish.secret=$SECRET
+        run: ./gradlew publishPlugins -Pgradle.publish.key=${{KEY}} -Pgradle.publish.secret=${{SECRET}}
         env:
           KEY: ${{ secrets.KEY }}
           SECRET: ${{ secrets.SECRET }}
