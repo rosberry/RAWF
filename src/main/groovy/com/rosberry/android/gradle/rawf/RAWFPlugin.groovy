@@ -52,7 +52,7 @@ class RAWFPlugin implements Plugin<Project> {
                 )
 
         project.gradle.buildFinished { result ->
-            if (result.failure != null) {
+            if (pluginProperties.enabled && result.failure != null) {
                 core.sendErrorMessage()
             }
         }
