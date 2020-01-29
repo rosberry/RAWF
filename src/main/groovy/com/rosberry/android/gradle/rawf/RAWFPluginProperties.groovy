@@ -18,6 +18,7 @@ class RAWFPluginProperties {
     public String jiraFromStatus = ""
     public String jiraToStatus = ""
     public String buildNumber = "1.0"
+    public String buildInformationUrl = ""
     public List<Object> dependsOnTasks = Arrays.asList("build")
 
     public void dependsOnTasks(Object... paths) {

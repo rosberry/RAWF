@@ -28,7 +28,8 @@ class RAWFPlugin implements Plugin<Project> {
         project.afterEvaluate {
             core = new RAWF(pluginProperties.jiraUrl, pluginProperties.jiraLogin, pluginProperties.jiraToken, pluginProperties.projectKey,
                     pluginProperties.jiraComponent, pluginProperties.jiraFromStatus, pluginProperties.buildNumber,
-                    pluginProperties.slackUrl, pluginProperties.errorSlackUrl, pluginProperties.jiraToStatus)
+                    pluginProperties.slackUrl, pluginProperties.errorSlackUrl, pluginProperties.jiraToStatus,
+                    pluginProperties.buildInformationUrl)
 
             if (pluginProperties.enabled) monitorTasksLifecycle(project)
         }

@@ -19,9 +19,11 @@ public class RAWF {
     private final String slackUrl;
     private final String errorSlackUrl;
     private final String jiraToStatus;
+    private final String buildInformationUrl;
 
     public RAWF(String jiraUrl, String jiraLogin, String jiraToken, String projectKey, String jiraComponent,
-                String jiraFromStatus, String buildNumber, String slackUrl, String errorSlackUrl, String jiraToStatus) {
+                String jiraFromStatus, String buildNumber, String slackUrl, String errorSlackUrl, String jiraToStatus,
+                String buildInformationUrl) {
         this.jiraUrl = jiraUrl;
         this.jiraLogin = jiraLogin;
         this.jiraToken = jiraToken;
@@ -32,6 +34,7 @@ public class RAWF {
         this.slackUrl = slackUrl;
         this.errorSlackUrl = errorSlackUrl;
         this.jiraToStatus = jiraToStatus;
+        this.buildInformationUrl = buildInformationUrl;
     }
 
     public void sendNotificationMessage() {
@@ -67,7 +70,7 @@ public class RAWF {
 
     public void sendErrorMessage() {
         NotificationsCreator notificationsCreator = new NotificationsCreator();
-        SlackMessage slackMessage = notificationsCreator.createErrorMessage("");
+        SlackMessage slackMessage = notificationsCreator.createErrorMessage(buildInformationUrl);
         SlackApi api = new SlackApi(errorSlackUrl);
         api.call(slackMessage);
     }
