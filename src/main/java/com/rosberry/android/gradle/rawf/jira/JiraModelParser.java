@@ -55,9 +55,15 @@ class JiraModelParser {
                     if (jsonFields.has(SUMMARY)) {
                         if (jsonFields.has(PARENT)) {
                             StringBuilder titleBuilder = new StringBuilder();
+
+                            String parentTitle = jsonFields.getAsJsonObject(PARENT)
+                                    .getAsJsonObject(FIELDS)
+                                    .get(SUMMARY)
+                                    .getAsString();
+
                             title = titleBuilder
                                     .append("_")
-                                    .append(jsonFields.getAsJsonObject(PARENT).getAsJsonObject(FIELDS).get(SUMMARY).getAsString())
+                                    .append(parentTitle)
                                     .append("_")
                                     .append(" -> ")
                                     .append(jsonFields.get(SUMMARY).getAsString())
