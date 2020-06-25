@@ -20,7 +20,7 @@ public class RAWFTest {
     @Before
     public void init() {
         rawf = new RAWF(jiraUrl, jiraLogin, jiraToken, projectKey, jiraComponent, jiraFromStatus, buildNumber, slackUrl,
-                slackUrl, jiraToStatus);
+                slackUrl, jiraToStatus, "");
     }
 
     @Test

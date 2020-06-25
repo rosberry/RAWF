@@ -19,6 +19,7 @@ class JiraModelParser {
     private static final String ISSUE_TYPE = "issuetype";
     private static final String NAME = "name";
     private static final String ID = "id";
+    private static final String PARENT = "parent";
     private final Gson gson;
 
     public JiraModelParser() {
@@ -52,7 +53,18 @@ class JiraModelParser {
                     JsonObject jsonFields = jsonIssue.getAsJsonObject(FIELDS);
 
                     if (jsonFields.has(SUMMARY)) {
-                        title = jsonFields.get(SUMMARY).getAsString();
+                        if (jsonFields.has(PARENT)) {
+                            StringBuilder titleBuilder = new StringBuilder();
+                            title = titleBuilder
+                                    .append("_")
+                                    .append(jsonFields.getAsJsonObject(PARENT).getAsJsonObject(FIELDS).get(SUMMARY).getAsString())
+                                    .append("_")
+                                    .append(" -> ")
+                                    .append(jsonFields.get(SUMMARY).getAsString())
+                                    .toString();
+                        } else {
+                            title = jsonFields.get(SUMMARY).getAsString();
+                        }
                     }
 
                     if (jsonFields.has(ISSUE_TYPE)) {
