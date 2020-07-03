@@ -16,7 +16,12 @@ public class NotificationsCreator {
     private static final String COLOR_BAD = "danger";
 
     public SlackMessage createMessage(List<Issue> issues, String jiraHost, String buildNumber) {
-        String title = TITLE_DEFAULT + buildNumber;
+        String title = new StringBuilder()
+                .append(TITLE_DEFAULT)
+                .append("`")
+                .append(buildNumber)
+                .append("`")
+                .toString();
         SlackMessage slackMessage = new SlackMessage(title);
 
         SlackAttachment featureAttachment = makeFeatureAttachment(issues, jiraHost);
